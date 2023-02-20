@@ -15,7 +15,7 @@ enum Commands {
     #[command(alias = "b")]
     Bytes {
         #[arg(long, short, default_value_t = 32)]
-        len: usize 
+        len: usize,
     },
     /// A random uuid v4
     #[command(alias = "u")]
@@ -25,20 +25,20 @@ enum Commands {
 fn main() {
     let cli = Cli::parse();
     match cli.command {
-        Commands::Bytes{ len } => {
-            use base64::{Engine as _, engine::general_purpose};
+        Commands::Bytes { len } => {
+            use base64::{engine::general_purpose, Engine as _};
 
             let mut bytes = vec![0u8; len];
             let mut rng = rand::thread_rng();
             rng.fill_bytes(&mut bytes);
-            
+
             let b64 = general_purpose::STANDARD.encode(&bytes);
             println!("{b64}")
-        },
+        }
         Commands::Uuid => {
             let id = Uuid::new_v4();
             println!("{id}")
-        },
+        }
     }
 }
 
